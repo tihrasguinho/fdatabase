@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": ".github",
+			"path": ".github"
+		},
+		{
+			"name": "fdatabase_base",
+			"path": "fdatabase_base"
+		},
+		{
+			"name": "fdatabase",
+			"path": "fdatabase"
+		},
+		{
+			"name": "fdatabase_web",
+			"path": "fdatabase_web"
+		},
+		{
+			"name": "fdatabase_native",
+			"path": "fdatabase_native"
+		}
+	],
+	"settings": {}
+}
