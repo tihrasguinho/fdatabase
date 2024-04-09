@@ -5,3 +5,7 @@
 ## 0.0.1+1
 
 * Added a native implementation for Android/iOS/MacOS/Windows/Linux
+
+## 0.0.1+2
+
+* Some adjusts on fdatabase_base dependency

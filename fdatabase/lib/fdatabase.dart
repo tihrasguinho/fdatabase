@@ -44,6 +44,44 @@ class FDatabase implements FDatabaseBase {
       _extractValues(parameters, sourceParameters);
 
       return cls.invoke(parameters) as T;
+    } else if (_isTypeOf<T, List<Entity>>()) {
+      final (type: type, rounds: _) = _typeListFromString(T.toString());
+
+      if (!_classes.keys.any((key) => key.toString() == type)) {
+        throw NotRegisteredException('Class $type not registered!');
+      }
+
+      final cls = _classes.entries.firstWhere((entry) => entry.key.toString() == type).value;
+
+      final parameters = cls.parameters;
+
+      final map = _load();
+
+      final source = map[key];
+
+      if (source == null) return null;
+
+      final sourceMap = Map<String, dynamic>.from(source);
+
+      final sourceList = sourceMap['list'];
+
+      if (sourceList == null) throw const InvalidException('This is not a list!');
+
+      final sourceValues = sourceMap['value'];
+
+      if (sourceValues == null) throw const InvalidException('This is not a list!');
+
+      final valueList = (sourceValues as List).cast<Map<String, dynamic>>();
+
+      final listOfParameters = valueList.map((value) {
+        final classParameters = List<Parameter>.from(parameters);
+        final valueParameters = Map<String, dynamic>.from(value['parameters']);
+
+        _extractValues(classParameters, valueParameters);
+        return classParameters;
+      }).toList();
+
+      return cls.invokeList(listOfParameters) as T;
     } else {
       final map = _load();
 
@@ -161,7 +199,7 @@ class FDatabase implements FDatabaseBase {
       ],
     );
 
-    _classes[T] = Class(type: T, constructor: constructor, parameters: params);
+    _classes[T] = Class<T>(type: T, constructor: constructor, parameters: params);
   }
 
   @override
@@ -221,6 +259,50 @@ class FDatabase implements FDatabaseBase {
           throw InvalidException('Invalid type of list $T!');
         }
 
+        if (_isTypeOf<T, List<Entity>>()) {
+          if (_classes.keys.any((key) => key.toString() == type)) {
+            final cls = _classes.entries.firstWhere((entry) => entry.key.toString() == type).value;
+            final listValues = <Map<String, dynamic>>[];
+            final listEntities = (value as List).cast<Entity>();
+
+            for (final entity in listEntities) {
+              final (properties, parameters) = _normalizeParametersAndProps(entity.properties, cls.parameters);
+
+              _extractProps(properties, parameters);
+
+              final map = <String, dynamic>{};
+
+              for (var i = 0; i < parameters.length; i++) {
+                final param = parameters[i];
+
+                map[i.toString()] = {
+                  'type': param.type.replaceAll('?', ''),
+                  'nullable': param.nullable,
+                  'value': param.value,
+                };
+              }
+
+              listValues.add({
+                'type': type.replaceAll('?', ''),
+                'nullable': type.endsWith('?'),
+                'parameters': map,
+              });
+            }
+
+            return {
+              'type': T.toString().replaceAll('?', ''),
+              'nullable': T.toString().endsWith('?'),
+              'list': {
+                'type': type.replaceAll('?', ''),
+                'nullable': type.endsWith('?'),
+              },
+              'value': listValues,
+            };
+          } else {
+            throw NotRegisteredException('Class $type not registered!');
+          }
+        }
+
         switch (type) {
           case 'String' || 'String?':
           case 'int' || 'int?':
@@ -272,7 +354,7 @@ class FDatabase implements FDatabaseBase {
     }
   }
 
-  void _extractProps(Set props, List<Parameter> parameters) {
+  void _extractProps(List props, List<Parameter> parameters) {
     if (props.length != parameters.length) {
       throw const InvalidException('Wrong number of parameters!');
     }
@@ -417,8 +499,8 @@ class FDatabase implements FDatabaseBase {
     }
   }
 
-  (Set properties, List<Parameter> parameters) _normalizeParametersAndProps(Map<Symbol, dynamic> properties, List<Parameter> parameters) {
-    if (!_isWeb) return (properties.values.toSet(), parameters);
+  (List properties, List<Parameter> parameters) _normalizeParametersAndProps(Map<Symbol, dynamic> properties, List<Parameter> parameters) {
+    if (!_isWeb) return (properties.values.toList(), parameters);
 
     final positionalParameters = parameters.whereType<PositionalParameter>().toList();
 
@@ -447,7 +529,7 @@ class FDatabase implements FDatabaseBase {
     final finalProps = [
       ...props.where((e) => !namedProps.contains(e)),
       ...namedProps,
-    ].map((e) => e.value).toSet();
+    ].map((e) => e.value).toList();
 
     return (finalProps, params);
   }

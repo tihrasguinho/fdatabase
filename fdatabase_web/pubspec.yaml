@@ -1,6 +1,6 @@
 name: fdatabase_web
 description: A implementation of fdatabase for web
-version: 0.0.1
+version: 0.0.1+1
 homepage: https://github.com/tihraguinho/fdatabase
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fdatabase_base: ^0.0.1
+  fdatabase_base: ^0.0.1+1
 
 dev_dependencies:
   flutter_test:

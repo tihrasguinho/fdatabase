@@ -1,6 +1,6 @@
 import 'parameter.dart';
 
-class Class {
+class Class<T> {
   final Type type;
   final Function constructor;
   final List<Parameter> parameters;
@@ -19,7 +19,7 @@ class Class {
     );
   }
 
-  dynamic invoke([List<Parameter>? parameters]) {
+  T invoke([List<Parameter>? parameters]) {
     final all = parameters ?? this.parameters;
 
     return Function.apply(
@@ -27,6 +27,10 @@ class Class {
       all.whereType<PositionalParameter>().map((e) => e.value).toList(),
       all.whereType<NamedParameter>().fold(<Symbol, dynamic>{}, (prev, next) => {...?prev, next.named: next.value}),
     );
+  }
+
+  List<T> invokeList(List<List<Parameter>> parameters) {
+    return parameters.map((e) => invoke(e)).toList();
   }
 
   @override
