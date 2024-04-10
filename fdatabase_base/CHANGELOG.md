@@ -12,8 +12,12 @@
 
 ## 0.0.2
 
-* Refactoring Storage class
+* Refactoring `Storage` class
 
 ## 0.0.3
 
-* Storage class adjustments
+* `Storage` class adjustments
+
+## 0.0.4
+
+* Added a method to save many data at once in `Storage` class
