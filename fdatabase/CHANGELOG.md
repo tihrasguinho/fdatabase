@@ -15,3 +15,7 @@
 * Some small fixes
 * Exported vital classes for package use (Entity, Storage, FDatabaseBase, FDatabaseException)
 * Added [examples](https://pub.dev/packages/fdatabase/example)
+
+## 0.0.3
+
+* New `Storage` implementation for web and native	

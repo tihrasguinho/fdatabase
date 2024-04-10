@@ -6,16 +6,22 @@ class StorageMock implements Storage {
   final Map<String, dynamic> _values = {};
 
   @override
-  Map<String, dynamic> load() => _values;
+  void clear() => _values.clear();
+
+  @override
+  bool exists(String key) => _values.containsKey(key);
+
+  @override
+  Map<String, dynamic>? get(String key) => _values[key];
 
   @override
   String? get path => '';
 
   @override
-  void remove() => _values.clear();
+  void put(String key, Map<String, dynamic> value) => _values[key] = value;
 
   @override
-  void save(Map<String, dynamic> value) => _values.addAll(value);
+  void remove(String key) => _values.remove(key);
 }
 
 void main() {

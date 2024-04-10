@@ -12,11 +12,10 @@ bool get _isWeb => const bool.fromEnvironment('dart.library.js_util');
 class FDatabase implements FDatabaseBase {
   final Storage _storage;
   final Map<Type, Class> _classes;
-  final Map<String, dynamic> _values;
 
-  FDatabase._(this._storage, this._classes, this._values);
+  FDatabase._(this._storage, this._classes);
 
-  FDatabase.fromStorage(Storage storage) : this._(storage, <Type, Class>{}, <String, dynamic>{});
+  FDatabase.fromStorage(Storage storage) : this._(storage, <Type, Class>{});
 
   static Future<FDatabase> getInstance() async {
     return FDatabase.fromStorage(await getStorage());
@@ -33,9 +32,7 @@ class FDatabase implements FDatabaseBase {
 
       final parameters = cls.parameters;
 
-      final map = _load();
-
-      final source = map[key];
+      final source = _storage.get(key);
 
       if (source == null) return null;
 
@@ -57,19 +54,15 @@ class FDatabase implements FDatabaseBase {
 
       final parameters = cls.parameters;
 
-      final map = _load();
-
-      final source = map[key];
+      final source = _storage.get(key);
 
       if (source == null) return null;
 
-      final sourceMap = Map<String, dynamic>.from(source);
-
-      final sourceList = sourceMap['list'];
+      final sourceList = source['list'];
 
       if (sourceList == null) throw const InvalidException('This is not a list!');
 
-      final sourceValues = sourceMap['value'];
+      final sourceValues = source['value'];
 
       if (sourceValues == null) throw const InvalidException('This is not a list!');
 
@@ -85,56 +78,52 @@ class FDatabase implements FDatabaseBase {
 
       return cls.invokeList(listOfParameters) as T;
     } else {
-      final map = _load();
-
-      final source = map[key];
+      final source = _storage.get(key);
 
       if (source == null) return null;
 
-      final sourceMap = Map<String, dynamic>.from(source);
-
-      if (sourceMap['list'] != null) {
-        final listMap = Map<String, dynamic>.from(sourceMap['list']);
+      if (source['list'] != null) {
+        final listMap = Map<String, dynamic>.from(source['list']);
 
         final list = switch (listMap['type']) {
-          'String' when listMap['nullable'] == false => (sourceMap['value'] as List).cast<String>(),
-          'String' when listMap['nullable'] == true => (sourceMap['value'] as List).cast<String?>(),
-          'int' when listMap['nullable'] == false => (sourceMap['value'] as List).cast<int>(),
-          'int' when listMap['nullable'] == true => (sourceMap['value'] as List).cast<int?>(),
-          'double' when listMap['nullable'] == false => (sourceMap['value'] as List).cast<double>(),
-          'double' when listMap['nullable'] == true => (sourceMap['value'] as List).cast<double?>(),
-          'bool' when listMap['nullable'] == false => (sourceMap['value'] as List).cast<bool>(),
-          'bool' when listMap['nullable'] == true => (sourceMap['value'] as List).cast<bool?>(),
-          'DateTime' when listMap['nullable'] == false => (sourceMap['value'] as List).map((e) => DateTime.fromMillisecondsSinceEpoch(e)).toList(),
-          'DateTime' when listMap['nullable'] == true => (sourceMap['value'] as List).map((e) => e != null ? DateTime.fromMillisecondsSinceEpoch(e) : null).toList(),
-          _ => throw NotSupportedException('Unsuported type of list ${sourceMap['type']}!'),
+          'String' when listMap['nullable'] == false => (source['value'] as List).cast<String>(),
+          'String' when listMap['nullable'] == true => (source['value'] as List).cast<String?>(),
+          'int' when listMap['nullable'] == false => (source['value'] as List).cast<int>(),
+          'int' when listMap['nullable'] == true => (source['value'] as List).cast<int?>(),
+          'double' when listMap['nullable'] == false => (source['value'] as List).cast<double>(),
+          'double' when listMap['nullable'] == true => (source['value'] as List).cast<double?>(),
+          'bool' when listMap['nullable'] == false => (source['value'] as List).cast<bool>(),
+          'bool' when listMap['nullable'] == true => (source['value'] as List).cast<bool?>(),
+          'DateTime' when listMap['nullable'] == false => (source['value'] as List).map((e) => DateTime.fromMillisecondsSinceEpoch(e)).toList(),
+          'DateTime' when listMap['nullable'] == true => (source['value'] as List).map((e) => e != null ? DateTime.fromMillisecondsSinceEpoch(e) : null).toList(),
+          _ => throw NotSupportedException('Unsuported type of list ${source['type']}!'),
         };
 
         return list as T;
       } else {
-        switch (sourceMap['type']) {
+        switch (source['type']) {
           case 'String':
             {
-              if (sourceMap['nullable'] == false) {
-                return sourceMap['value'] as T;
+              if (source['nullable'] == false) {
+                return source['value'] as T;
               } else {
-                return sourceMap['value'] as T;
+                return source['value'] as T;
               }
             }
         }
 
-        final value = switch (sourceMap['type']) {
-          'String' when sourceMap['nullable'] == false => sourceMap['value'] as String,
-          'String' when sourceMap['nullable'] == true => sourceMap['value'] as String?,
-          'int' when sourceMap['nullable'] == false => sourceMap['value'] as int,
-          'int' when sourceMap['nullable'] == true => sourceMap['value'] as int?,
-          'double' when sourceMap['nullable'] == false => sourceMap['value'] as double,
-          'double' when sourceMap['nullable'] == true => sourceMap['value'] as double?,
-          'bool' when sourceMap['nullable'] == false => sourceMap['value'] as bool,
-          'bool' when sourceMap['nullable'] == true => sourceMap['value'] as bool?,
-          'DateTime' when sourceMap['nullable'] == false => DateTime.fromMillisecondsSinceEpoch(sourceMap['value'] as int),
-          'DateTime' when sourceMap['nullable'] == true => sourceMap['value'] != null ? DateTime.fromMillisecondsSinceEpoch(sourceMap['value'] as int) : null,
-          _ => throw NotSupportedException('Unsupported type ${sourceMap['type']}!'),
+        final value = switch (source['type']) {
+          'String' when source['nullable'] == false => source['value'] as String,
+          'String' when source['nullable'] == true => source['value'] as String?,
+          'int' when source['nullable'] == false => source['value'] as int,
+          'int' when source['nullable'] == true => source['value'] as int?,
+          'double' when source['nullable'] == false => source['value'] as double,
+          'double' when source['nullable'] == true => source['value'] as double?,
+          'bool' when source['nullable'] == false => source['value'] as bool,
+          'bool' when source['nullable'] == true => source['value'] as bool?,
+          'DateTime' when source['nullable'] == false => DateTime.fromMillisecondsSinceEpoch(source['value'] as int),
+          'DateTime' when source['nullable'] == true => source['value'] != null ? DateTime.fromMillisecondsSinceEpoch(source['value'] as int) : null,
+          _ => throw NotSupportedException('Unsupported type ${source['type']}!'),
         };
 
         return value as T;
@@ -143,15 +132,15 @@ class FDatabase implements FDatabaseBase {
   }
 
   @override
-  void put<T>(String key, T value) {
-    _save({key: _put<T>(key, value)});
-  }
+  void put<T>(String key, T value) => _storage.put(key, _put<T>(key, value));
 
   @override
   void batch(void Function(void Function<T>(String key, T value) put) func) {
     final temp = <String, dynamic>{};
     func(<T>(String key, T value) => temp[key] = _put<T>(key, value));
-    return _save(temp);
+    for (var key in temp.keys) {
+      _storage.put(key, temp[key]);
+    }
   }
 
   @override
@@ -205,20 +194,13 @@ class FDatabase implements FDatabaseBase {
   }
 
   @override
-  void clear() => _clear();
+  void clear() => _storage.clear();
 
   @override
-  bool containsKey(String key) {
-    final map = _load();
-    return map.containsKey(key);
-  }
+  bool containsKey(String key) => _storage.exists(key);
 
   @override
-  void delete(String key) {
-    final map = _load();
-    map.remove(key);
-    return _save(map);
-  }
+  void delete(String key) => _storage.remove(key);
 
   Map<String, dynamic> _put<T>(String key, T value) {
     if (_isTypeOf<T, Entity>()) {
@@ -473,23 +455,23 @@ class FDatabase implements FDatabaseBase {
     }
   }
 
-  Map<String, dynamic> _load() {
-    if (_values.isEmpty) {
-      _values.clear();
-      _values.addAll(_storage.load());
-    }
-    return _values;
-  }
+  // Map<String, dynamic> _load() {
+  //   if (_values.isEmpty) {
+  //     _values.clear();
+  //     _values.addAll(_storage.load());
+  //   }
+  //   return _values;
+  // }
 
-  void _save(Map<String, dynamic> map) {
-    _values.addAll(map);
-    _storage.save(_values);
-  }
+  // void _save(Map<String, dynamic> map) {
+  //   _values.addAll(map);
+  //   _storage.save(_values);
+  // }
 
-  void _clear() {
-    _values.clear();
-    _storage.save(_values);
-  }
+  // void _clear() {
+  //   _values.clear();
+  //   _storage.save(_values);
+  // }
 
   String? _getListType(List list) {
     try {
