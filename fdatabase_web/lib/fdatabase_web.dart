@@ -32,6 +32,16 @@ class _StorageWebImp implements Storage {
   }
 
   @override
+  void putMany(Map<String, Map<String, dynamic>> values) {
+    final source = values.entries.fold(
+      <String, String>{},
+      (prev, next) => {...prev, next.key: _toBase64(jsonEncode(next.value))},
+    );
+
+    return html.window.localStorage.addAll(source);
+  }
+
+  @override
   void remove(String key) {
     html.window.localStorage.remove(key);
   }
