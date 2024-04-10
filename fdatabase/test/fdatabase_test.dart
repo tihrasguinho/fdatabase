@@ -1,6 +1,5 @@
 import 'package:checks/checks.dart';
 import 'package:fdatabase/fdatabase.dart';
-import 'package:fdatabase_base/fdatabase_base.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class StorageMock implements Storage {

@@ -6,28 +6,15 @@ on:
       - 'v-fdatabase-native-[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
-  publish:
+  publishing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.10.0'
-      - name: Disable Telemetry
-        run: flutter --disable-telemetry
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Analyze
-        run: flutter analyze
-      - name: Run tests
-        run: flutter test
-      - name: Check Publish Warnings
-        run: dart pub publish --dry-run
-      - name: fdatabase_native
+      - name: 'Checkout'
+        uses: actions/checkout@main
+        
+      - name: 'fdatabase_native'
         uses: k-paxian/dart-package-publisher@master
         with:
           credentialJson: ${{ secrets.CREDENTIAL_JSON }}
           flutter: true
-          skipTests: true
           relativePath: fdatabase_native

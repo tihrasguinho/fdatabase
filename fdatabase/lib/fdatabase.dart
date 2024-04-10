@@ -1,5 +1,7 @@
 library fdatabase;
 
+export 'package:fdatabase_base/fdatabase_base.dart' show Entity, Storage, FDatabaseBase, FDatabaseException, NotRegisteredException, NotSupportedException, InvalidException, NestedListException;
+
 import 'package:fdatabase_base/fdatabase_base.dart';
 
 import 'src/storage.dart';

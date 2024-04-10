@@ -1,6 +1,6 @@
 name: fdatabase_base
 description: A base from the package fdatabase.
-version: 0.0.1+1
+version: 0.0.1+2
 homepage: https://github.com/tihrasguinho/fdatabase
 
 environment:
