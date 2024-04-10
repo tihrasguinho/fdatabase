@@ -1,6 +1,6 @@
 name: fdatabase_native
 description: A implementation of the fdatabase package for native platforms
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/tihrasguinho/fdatabase
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fdatabase_base: ^0.0.3
+  fdatabase_base: ^0.0.4
   path_provider: ^2.1.2
   path: ^1.8.3
 

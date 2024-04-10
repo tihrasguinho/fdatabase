@@ -46,6 +46,21 @@ class _StorageIoImp implements Storage {
   }
 
   @override
+  void putMany(Map<String, Map<String, dynamic>> values) {
+    final source = jsonDecode(_file.readAsStringSync()) as Map<String, dynamic>;
+    source.addAll(
+      values.entries.fold(
+        <String, String>{},
+        (prev, next) => {
+          ...prev,
+          next.key: _toBase64(jsonEncode(next.value)),
+        },
+      ),
+    );
+    return _file.writeAsStringSync(jsonEncode(source));
+  }
+
+  @override
   void remove(String key) {
     final source = jsonDecode(_file.readAsStringSync()) as Map<String, dynamic>;
     source.remove(key);

@@ -13,3 +13,7 @@
 ## 0.0.2
 
 * New `Storage` implementation
+
+## 0.0.3
+
+* Added a method to save many data at once in `Storage` class
