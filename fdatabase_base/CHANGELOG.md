@@ -13,3 +13,7 @@
 ## 0.0.2
 
 * Refactoring Storage class
+
+## 0.0.3
+
+* Storage class adjustments

@@ -3,17 +3,13 @@ abstract interface class Storage {
 
   const Storage([this.path]);
 
-  void put(String key, dynamic value);
+  void put(String key, Map<String, dynamic> value);
 
-  dynamic get(String key);
+  Map<String, dynamic>? get(String key);
 
   void remove(String key);
 
   void clear();
 
   bool exists(String key);
-
-  // void save(Map<String, dynamic> value);
-  // void remove();
-  // Map<String, dynamic> load();
 }
