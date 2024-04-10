@@ -1,6 +1,6 @@
 name: fdatabase
 description: A new flutter package to save and load data from local database
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/tihrasguinho/fdatabase
 
 environment:
@@ -11,9 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fdatabase_base: ^0.0.3
-  fdatabase_web: ^0.0.2
-  fdatabase_native: ^0.0.2
+  fdatabase_base: ^0.0.4
+  fdatabase_web: ^0.0.3
+  fdatabase_native: ^0.0.3
 
 dev_dependencies:
   flutter_test:

@@ -136,11 +136,9 @@ class FDatabase implements FDatabaseBase {
 
   @override
   void batch(void Function(void Function<T>(String key, T value) put) func) {
-    final temp = <String, dynamic>{};
+    final temp = <String, Map<String, dynamic>>{};
     func(<T>(String key, T value) => temp[key] = _put<T>(key, value));
-    for (var key in temp.keys) {
-      _storage.put(key, temp[key]);
-    }
+    return _storage.putMany(temp);
   }
 
   @override

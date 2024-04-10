@@ -8,7 +8,7 @@
 
 ## 0.0.1+2
 
-* Some adjusts on fdatabase_base dependency
+* Some adjusts on `fdatabase_base` dependency
 
 ## 0.0.2
 
@@ -19,3 +19,7 @@
 ## 0.0.3
 
 * New `Storage` implementation for web and native	
+
+## 0.0.4
+
+* Adjustment on `Storage` class for bath operations

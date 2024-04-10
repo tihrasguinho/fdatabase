@@ -21,6 +21,11 @@ class StorageMock implements Storage {
   void put(String key, Map<String, dynamic> value) => _values[key] = value;
 
   @override
+  void putMany(Map<String, Map<String, dynamic>> values) {
+    _values.addAll(values);
+  }
+
+  @override
   void remove(String key) => _values.remove(key);
 }
 
