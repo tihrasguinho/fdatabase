@@ -14,8 +14,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.10.0'
-      - name: Go To Directory
-        run: cd fdatabase
       - name: Disable Telemetry
         run: flutter --disable-telemetry
       - name: Install dependencies
@@ -26,8 +24,8 @@ jobs:
         run: flutter test
       - name: Check Publish Warnings
         run: dart pub publish --dry-run
-      - name: Publish
-        uses: k-paxian/dart-package-publisher@v1.5.1
+      - name: fdatabase
+        uses: k-paxian/dart-package-publisher@master
         with:
           credentialJson: ${{ secrets.CREDENTIAL_JSON }}
           flutter: true
