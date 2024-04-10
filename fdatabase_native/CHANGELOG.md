@@ -9,3 +9,7 @@
 ## 0.0.1+2
 
 * Some small fixes
+
+## 0.0.2
+
+* New `Storage` implementation

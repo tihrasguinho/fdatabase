@@ -15,29 +15,41 @@ class _StorageIoImp implements Storage {
   const _StorageIoImp(this._file);
 
   @override
-  Map<String, dynamic> load() {
-    if (!_file.existsSync()) {
-      _file.createSync(recursive: true);
-      _file.writeAsStringSync(_toBase64(_emptyDatabase));
-      return {};
-    } else {
-      return json.decode(_fromBase64(_file.readAsStringSync()));
-    }
+  void clear() => _file.writeAsStringSync(_emptyDatabase);
+
+  @override
+  bool exists(String key) {
+    final source = jsonDecode(_file.readAsStringSync()) as Map<String, dynamic>;
+
+    return source.containsKey(key);
+  }
+
+  @override
+  Map<String, dynamic>? get(String key) {
+    final source = jsonDecode(_file.readAsStringSync()) as Map<String, dynamic>;
+
+    final value = source[key];
+
+    if (value == null) return null;
+
+    return jsonDecode(_fromBase64(value)) as Map<String, dynamic>;
   }
 
   @override
   String? get path => _file.path;
 
   @override
-  void remove() {
-    _file.writeAsStringSync(_toBase64(_emptyDatabase));
+  void put(String key, Map<String, dynamic> value) {
+    final source = jsonDecode(_file.readAsStringSync()) as Map<String, dynamic>;
+    source[key] = _toBase64(jsonEncode(value));
+    _file.writeAsStringSync(jsonEncode(source));
   }
 
   @override
-  void save(Map<String, dynamic> value) {
-    final map = load();
-    map.addAll(value);
-    return _file.writeAsStringSync(_toBase64(json.encode(map)));
+  void remove(String key) {
+    final source = jsonDecode(_file.readAsStringSync()) as Map<String, dynamic>;
+    source.remove(key);
+    _file.writeAsStringSync(jsonEncode(source));
   }
 }
 
@@ -47,5 +59,5 @@ String _fromBase64(String source) => utf8.decode(base64.decode(source));
 Future<Storage> getNativeStorage() async {
   final dir = await getApplicationDocumentsDirectory();
 
-  return _StorageIoImp(File(p.join(dir.path, 'fDatabase', 'database')));
+  return _StorageIoImp(File(p.join(dir.path, 'fDatabase', 'database.json')));
 }
