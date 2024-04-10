@@ -9,3 +9,7 @@
 ## 0.0.1+2
 
 * Some small corrections
+
+## 0.0.2
+
+* Refactoring Storage class
