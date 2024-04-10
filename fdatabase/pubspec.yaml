@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fdatabase_base: ^0.0.1+1
+  fdatabase_base: ^0.0.1+2
   fdatabase_web: ^0.0.1
   fdatabase_native: ^0.0.1
 
