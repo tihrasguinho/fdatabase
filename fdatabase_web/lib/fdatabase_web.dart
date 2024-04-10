@@ -7,28 +7,33 @@ import 'dart:convert';
 import 'package:fdatabase_base/fdatabase_base.dart';
 import 'dart:html' as html;
 
-const String _fdatabaseKey = 'dev.tihrasguinho.fdatabase';
-const String _emptyDatabase = 'e30=';
-
 class _StorageWebImp implements Storage {
   @override
-  Map<String, dynamic> load() {
-    final storage = html.window.localStorage[_fdatabaseKey] ??= _emptyDatabase;
+  void clear() => html.window.localStorage.clear();
 
-    return jsonDecode(_fromBase64(storage)) as Map<String, dynamic>;
+  @override
+  bool exists(String key) => html.window.localStorage.containsKey(key);
+
+  @override
+  Map<String, dynamic>? get(String key) {
+    final value = html.window.localStorage[key];
+
+    if (value == null) return null;
+
+    return jsonDecode(_fromBase64(value)) as Map<String, dynamic>;
   }
 
   @override
   String? get path => null;
 
   @override
-  void remove() {
-    html.window.localStorage[_fdatabaseKey] = _emptyDatabase;
+  void put(String key, Map<String, dynamic> value) {
+    html.window.localStorage[key] = _toBase64(jsonEncode(value));
   }
 
   @override
-  void save(Map<String, dynamic> value) {
-    html.window.localStorage[_fdatabaseKey] = _toBase64(jsonEncode(value));
+  void remove(String key) {
+    html.window.localStorage.remove(key);
   }
 }
 
