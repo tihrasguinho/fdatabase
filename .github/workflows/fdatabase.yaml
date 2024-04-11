@@ -3,7 +3,7 @@ name: Publish fdatabase to pub.dev
 on:
   push:
     tags:
-      - 'v-fdatabase-[0-9]+.[0-9]+.[0-9]+*'
+      - 'v-[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   publishing:
@@ -17,4 +17,3 @@ jobs:
         with:
           credentialJson: ${{ secrets.CREDENTIAL_JSON }}
           flutter: true
-          relativePath: fdatabase

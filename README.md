@@ -1,4 +1,4 @@
-##### [fdatabase / Flutter Database](https://pub.dev/packages/fdatabase)
+##### fdatabase / Flutter Database
 
 A new flutter package to save and load (Synchronously) data from local database
 
