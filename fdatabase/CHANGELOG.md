@@ -23,3 +23,7 @@
 ## 0.0.4
 
 * Adjustment on `Storage` class for bath operations
+
+## 0.0.5
+
+* Removed aditional packages `fdatabase_web` and `fdatabase_native`
