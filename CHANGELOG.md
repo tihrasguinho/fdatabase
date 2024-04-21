@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Storage bug fixed
+
 ## 0.0.6
 
 * Removed extra packages
