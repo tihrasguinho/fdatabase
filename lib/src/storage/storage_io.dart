@@ -75,5 +75,12 @@ String _fromBase64(String source) => utf8.decode(base64.decode(source));
 Future<Storage> getStorage() async {
   final dir = await getApplicationDocumentsDirectory();
 
-  return _StorageIoImp(File(p.join(dir.path, 'fDatabase', 'database.json')));
+  final file = File(p.join(dir.path, 'fDatabase', 'database.json'));
+
+  if (!await file.exists()) {
+    await file.create(recursive: true);
+    await file.writeAsString('{}');
+  }
+
+  return _StorageIoImp(file);
 }
